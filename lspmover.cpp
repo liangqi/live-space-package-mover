@@ -34,10 +34,22 @@ void LSPMover::process()
         QString link = item.attribute("href");
         qDebug() << "article link=" << link;
         QUrl relativeUrl(link);
-        parseItem(baseUrl.resolved(relativeUrl));
-        break;
+        itemUrls.append(baseUrl.resolved(relativeUrl));
     }
-    //emit finished();
+
+    processItems();
+}
+
+void LSPMover::processItems()
+{
+    qDebug() << "LSPMover::processItems()";
+    if (itemUrls.size() > 0) {
+        qDebug() << "itemUrls.size():" << itemUrls.size();
+        QUrl url = itemUrls.takeFirst();
+        parseItem(url);
+    } else {
+        emit finished();
+    }
 }
 
 void LSPMover::parseItem(const QUrl &url)
@@ -53,7 +65,6 @@ void LSPMover::processItem()
     qDebug() << "LSPMover::processItem()";
     disconnect(page, SIGNAL(loadFinished(bool)),
         this, SLOT(processItem()));
-
 
     QWebElementCollection divs = page->mainFrame()->findAllElements("div");
     foreach (QWebElement div, divs) {
@@ -90,5 +101,5 @@ void LSPMover::processItem()
         }
     }
 
-    emit finished();
+    processItems();
 }
