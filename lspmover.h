@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QUrl>
 #include <QList>
+#include <QHash>
+#include <QVariant>
 #include <QtWebKit/QWebPage>
 
 class LSPMover : public QObject
@@ -17,15 +19,25 @@ signals:
 
 public slots:
     void parse(const QUrl &url);
+
+private slots:
     void parseItem(const QUrl &url);
     void processItems();
     void process();
     void processItem();
 
 private:
+    void output();
+
+private:
     QWebPage *page;
     QUrl baseUrl;
     QList<QUrl> itemUrls;
+
+    QHash<QString, QVariant> blogInfo;
+    QList< QHash<QString, QVariant> > blogEntries;
+
+    QString outputFileName;
 };
 
 #endif // LSPMOVER_H
