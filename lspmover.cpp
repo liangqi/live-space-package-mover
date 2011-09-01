@@ -178,6 +178,26 @@ void LSPMover::parseItem(const QUrl &url)
         this, SLOT(processItem()));
 }
 
+void LSPMover::updateUrl(QWebElement &e, QUrl url, QString tag, QString attribute)
+{
+    QWebElementCollection items = e.findAll(tag);
+    foreach (QWebElement item, items) {
+        QString href = item.attribute(attribute);
+        if (!href.isEmpty()) {
+            QUrl tmpUrl(href);
+            if (tmpUrl.isRelative()) {
+                item.setAttribute(attribute, url.resolved(tmpUrl).toString());
+            }
+        }
+    }
+}
+
+void LSPMover::checkUrl(QWebElement &e, QUrl url)
+{
+    updateUrl(e, url, "a", "href");
+    updateUrl(e, url, "img", "src");
+}
+
 void LSPMover::processItem()
 {
     disconnect(page, SIGNAL(loadFinished(bool)),
@@ -200,6 +220,7 @@ void LSPMover::processItem()
             QWebElementCollection bps = div.findAll("div");
             foreach (QWebElement bp, bps) {
                 if (bp.attribute("class") == "blogpost") {
+                    checkUrl(bp, entry["url"].toUrl());
                     entry["content"] = bp.toInnerXml();
                 }
                 QList<QVariant> comments;

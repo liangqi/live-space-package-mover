@@ -28,6 +28,8 @@ private slots:
 
 private:
     void output();
+    void updateUrl(QWebElement &e, QUrl url, QString tag, QString attribute);
+    void checkUrl(QWebElement &e, QUrl url);
 
 private:
     QWebPage *page;
