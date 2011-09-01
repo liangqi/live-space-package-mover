@@ -1,0 +1,43 @@
+Live Space Package Mover
+
+Missed the deadline for migrating Microsoft Live Space blog to WordPress. Luckily I downloaded the backup file from Live Space.
+
+But when I tried to import the backup file into my own wordpress blog, I found it is impossible. And wordpress.com had already removed the official convertor.
+
+Then I wrote this project, hope it is still useful for many people.
+
+If you still don't have the backup file of your Live Space blog, please go the following forum to get it:
+Windows Live Solution Center: Downloading or Migrating your Space http://windowslivehelp.com/forums.aspx?forumid=0568e260-2dae-4115-b574-f8629d8be5b4
+
+This project is based on Qt 4.7.3 and later.
+
+You can download the Qt libs for your platforms here:
+http://qt.nokia.com/downloads/downloads#qt-lib
+
+Yes, to build this project, you also need a compiler for your platforms. 
+
+For example, 
+Windows 7 -> MSVC 2008 or etc. 
+Mac OS X -> XCode(g++ is inside of it). 
+Linux -> g++
+
+Build it:
+qmake
+make // or nmake for MSVC
+
+Use it:
+Uncompress your Live Space blog backup package file, and put it into a folder under your web server. For example,
+http://www.yourdomain.com/lsp_folder/
+./live-space-package-mover http://www.yourdomain.com/lsp_folder/
+
+After a while, you will get a output_yyyymmdd-hhmm.xml. You can go to your wordpress blog admin pages, "Tools"->"Import", and choose "WordPress", click "Choose File" and choose the above generated file, and click "Upload file and import". It will be fine. All posts and comments will be imported.
+
+Issues:
+1. After this import, all images in your blogs are still point to http://www.yourdomain.com/lsp_folder/img, you could either keep it or manually put them into your wordpress blog media library and update the links to them.
+2. Looks like the "category" doesn't work.
+
+Good luck!
+
+Liang Qi
+cavendish.qi@gmail.com
+2011.09.01
